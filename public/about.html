@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — INSTAanonymous</title>
+  <meta name="description" content="Learn about INSTAanonymous — the free, anonymous Instagram profile and story viewer built for privacy-conscious users." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://instastoryviewer.us/about" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://instastoryviewer.us/about" />
+  <meta property="og:title" content="About Us — INSTAanonymous" />
+  <meta property="og:description" content="Learn about INSTAanonymous — the free, anonymous Instagram profile and story viewer built for privacy-conscious users." />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="INSTAanonymous" />
+  <link rel="alternate" hreflang="en" href="https://instastoryviewer.us/about" />
+  <link rel="alternate" hreflang="x-default" href="https://instastoryviewer.us/" />
+</head>
+<body>
+
+  <header class="site-top">
+    <div class="container nav">
+      <a class="brand" href="/"><span class="brand-icon"></span><span class="brand-text">INSTA<small>anonymous</small></span></a>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/#features">Features</a>
+        <a href="/blog">Blog</a>
+        <a href="/contact">Contact</a>
+      </nav>
+      <a class="nav-cta" href="/">View Stories Free</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/">Home</a><a href="/#features">Features</a><a href="/blog">Blog</a><a href="/contact">Contact</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <h1>About Us</h1>
+      <p>Who we are and why we built INSTAanonymous</p>
+    </section>
+
+    <div class="legal-body">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:48px">
+        <div class="feature-card" style="min-height:auto;padding:28px">
+          <div style="font-size:36px;margin-bottom:16px">👁</div>
+          <h3 style="font-size:18px;margin:0 0 8px">Anonymous Viewing</h3>
+          <p style="margin:0;font-size:14px">Browse public Instagram profiles without creating an account or revealing your identity.</p>
+        </div>
+        <div class="feature-card" style="min-height:auto;padding:28px">
+          <div style="font-size:36px;margin-bottom:16px">🔒</div>
+          <h3 style="font-size:18px;margin:0 0 8px">Privacy First</h3>
+          <p style="margin:0;font-size:14px">We never ask for your Instagram login, never store your searches, and never share your data.</p>
+        </div>
+      </div>
+
+      <h2>Our Story</h2>
+      <p>INSTAanonymous was created by a small team of developers who believe that browsing publicly available social media content should not require handing over personal account credentials. We noticed that every existing Instagram viewer either required a login, displayed intrusive ads, or buried simple features behind paywalls.</p>
+      <p>We built this tool from scratch with a backend-first approach — meaning all Instagram data fetching happens on our servers, never in your browser. Your IP address never contacts Instagram directly. Your searches are cached temporarily to improve speed and reduce load, then discarded.</p>
+
+      <h2>What We Do</h2>
+      <p>INSTAanonymous is a free, anonymous viewer for <strong>public</strong> Instagram content. It lets you:</p>
+      <ul>
+        <li>View public Instagram profiles — avatar, bio, follower counts, post counts</li>
+        <li>Browse public posts and reels with thumbnails and engagement data</li>
+        <li>Watch active public stories from the last 24 hours</li>
+        <li>View highlights from public accounts</li>
+        <li>Download public media directly from our viewer</li>
+      </ul>
+      <p>We do not support, attempt to bypass, or claim to bypass private account restrictions. If an account is set to private, only their public profile information (name, username, bio) is shown — nothing more.</p>
+
+      <h2>Our Technology</h2>
+      <p>Our backend is built on Node.js with Express. We use a real Chrome browser running on our server to fetch public Instagram data the same way a regular user would — by visiting the public profile page. All media is proxied through our servers so your browser never has to contact Instagram's CDN directly.</p>
+      <p>Results are cached for 15 minutes to keep the tool fast and reduce repeated requests to Instagram. We do not store profile data permanently. No user accounts, no databases of Instagram content.</p>
+
+      <h2>Disclaimer &amp; Affiliation</h2>
+      <p>INSTAanonymous is an independent project. We are <strong>not affiliated with, endorsed by, or connected to Instagram, Meta Platforms Inc., or any of their subsidiaries.</strong> Instagram™ is a registered trademark of Meta Platforms Inc.</p>
+      <p>This tool is intended for lawful use only. Users are responsible for ensuring that their use of this tool complies with applicable laws and Instagram's terms of service.</p>
+
+      <h2>Contact Us</h2>
+      <p>Have a question, found a bug, or want to send a DMCA notice? We respond to all legitimate enquiries.</p>
+      <p><a href="/contact">→ Go to Contact Page</a></p>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <a class="brand" href="/"><span class="brand-icon"></span><span class="brand-text">INSTA<small>anonymous</small></span></a>
+        <p class="footer-text">A free anonymous viewer for public Instagram profiles, stories, posts and reels. No login required.</p>
+      </div>
+      <div><h4 class="footer-title">Quick Links</h4><nav class="footer-links"><a href="/">Home</a><a href="/#features">Features</a><a href="/#faq">FAQ</a><a href="/blog">Blog</a></nav></div>
+      <div><h4 class="footer-title">Legal</h4><nav class="footer-links"><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/privacy">Privacy Policy</a><a href="/disclaimer">Disclaimer</a><a href="/terms">Terms &amp; Conditions</a><a href="/dmca">DMCA</a></nav></div>
+      <div><h4 class="footer-title">Newsletter</h4><form class="newsletter"><input type="email" placeholder="Enter your email" /><button type="submit">→</button></form><div class="socials"><a href="#">f</a><a href="#">x</a><a href="#">in</a><a href="#">◎</a></div></div>
+    </div>
+    <div class="container footer-bottom">Copyright © 2026 INSTAanonymous · All Rights Reserved · Not affiliated with Instagram or Meta. · <a href="/privacy" style="color:rgba(255,255,255,.6)">Privacy</a> · <a href="/terms" style="color:rgba(255,255,255,.6)">Terms</a></div>
+  </footer>
+
+  <script>document.getElementById('menuBtn')?.addEventListener('click',()=>document.getElementById('mobileMenu').classList.toggle('open'));</script>
+</body>
+</html>

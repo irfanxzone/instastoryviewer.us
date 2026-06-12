@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /.chrome-data/
+Disallow: /src/
+
+# Block access to internal API endpoints
+Disallow: /api/ig/
+Disallow: /api/proxy
+
+# Allow all static pages and blog
+Allow: /blog
+Allow: /about
+Allow: /contact
+Allow: /privacy
+Allow: /disclaimer
+Allow: /terms
+Allow: /dmca
+
+Sitemap: https://instastoryviewer.us/sitemap.xml

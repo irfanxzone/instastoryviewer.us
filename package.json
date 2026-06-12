@@ -1,0 +1,27 @@
+{
+  "name": "instagram-viewer",
+  "version": "2.0.0",
+  "description": "Production-ready public Instagram profile viewer with backend fetching, cache, proxy rotation, and puppeteer-core fallback.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "NODE_ENV=development node src/server.js",
+    "test:resolver": "node src/utils/selfTest.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "lru-cache": "^11.0.2",
+    "morgan": "^1.10.0",
+    "puppeteer-core": "^24.15.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,8 @@
+node_modules
+.chrome-data
+src/storage/cache.json
+.env
+.env.local
+logs/
+*.log
+.git

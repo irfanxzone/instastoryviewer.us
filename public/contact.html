@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — INSTAanonymous</title>
+  <meta name="description" content="Get in touch with INSTAanonymous. Report bugs, send DMCA notices, or ask general questions about our anonymous Instagram viewer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://instastoryviewer.us/contact" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://instastoryviewer.us/contact" />
+  <meta property="og:title" content="Contact Us — INSTAanonymous" />
+  <meta property="og:description" content="Get in touch with INSTAanonymous. Report bugs, send DMCA notices, or ask general questions about our anonymous Instagram viewer." />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="INSTAanonymous" />
+  <link rel="alternate" hreflang="en" href="https://instastoryviewer.us/contact" />
+  <link rel="alternate" hreflang="x-default" href="https://instastoryviewer.us/" />
+</head>
+<body>
+
+  <header class="site-top">
+    <div class="container nav">
+      <a class="brand" href="/"><span class="brand-icon"></span><span class="brand-text">INSTA<small>anonymous</small></span></a>
+      <nav class="nav-links"><a href="/">Home</a><a href="/#features">Features</a><a href="/blog">Blog</a><a href="/contact" aria-current="page">Contact</a></nav>
+      <a class="nav-cta" href="/">View Stories Free</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu"><a href="/">Home</a><a href="/#features">Features</a><a href="/blog">Blog</a><a href="/contact">Contact</a></div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <h1>Contact Us</h1>
+      <p>We read every message and respond to all legitimate enquiries</p>
+    </section>
+
+    <div class="contact-grid container">
+      <div class="contact-info">
+        <h2>Get in Touch</h2>
+        <p>Whether you have a question about the tool, found a bug, want to submit a DMCA notice, or simply want to say hello — fill out the form and we'll get back to you as soon as possible.</p>
+
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div>
+            <h4>Email</h4>
+            <p>instastoryviewer.us@gmail.com</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">⚖️</div>
+          <div>
+            <h4>Legal / DMCA</h4>
+            <p>instastoryviewer.us@gmail.com<br>We respond to DMCA notices within 48 hours.</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🐛</div>
+          <div>
+            <h4>Bug Reports</h4>
+            <p>Found something broken? Tell us the username you searched and what went wrong — we'll fix it fast.</p>
+          </div>
+        </div>
+
+        <div class="note" style="margin-top:28px">
+          <strong>Please note:</strong> We cannot help you access private Instagram accounts. We only support public content. For private account issues, contact Instagram directly.
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <h3 style="margin:0 0 22px;font-size:20px">Send a Message</h3>
+        <form id="contactForm" onsubmit="handleSubmit(event)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" placeholder="John" required />
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" placeholder="Smith" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject">
+              <option value="">Select a topic…</option>
+              <option value="bug">Bug report</option>
+              <option value="dmca">DMCA / Content removal</option>
+              <option value="feature">Feature request</option>
+              <option value="legal">Legal enquiry</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Describe your question or issue in detail…" required></textarea>
+          </div>
+          <button type="submit" class="form-submit" id="submitBtn">Send Message →</button>
+          <div id="formMsg" style="margin-top:14px;font-size:13px;font-weight:600;text-align:center;display:none"></div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div><a class="brand" href="/"><span class="brand-icon"></span><span class="brand-text">INSTA<small>anonymous</small></span></a><p class="footer-text">Free anonymous Instagram viewer. No login, no app, no unnecessary steps.</p></div>
+      <div><h4 class="footer-title">Quick Links</h4><nav class="footer-links"><a href="/">Home</a><a href="/#features">Features</a><a href="/#faq">FAQ</a><a href="/blog">Blog</a></nav></div>
+      <div><h4 class="footer-title">Legal</h4><nav class="footer-links"><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/privacy">Privacy Policy</a><a href="/disclaimer">Disclaimer</a><a href="/terms">Terms &amp; Conditions</a><a href="/dmca">DMCA</a></nav></div>
+      <div><h4 class="footer-title">Newsletter</h4><form class="newsletter"><input type="email" placeholder="Enter your email" /><button type="submit">→</button></form><div class="socials"><a href="#">f</a><a href="#">x</a><a href="#">in</a><a href="#">◎</a></div></div>
+    </div>
+    <div class="container footer-bottom">Copyright © 2026 INSTAanonymous · All Rights Reserved · Not affiliated with Instagram or Meta. · <a href="/privacy" style="color:rgba(255,255,255,.6)">Privacy</a> · <a href="/terms" style="color:rgba(255,255,255,.6)">Terms</a></div>
+  </footer>
+
+  <script>
+    document.getElementById('menuBtn')?.addEventListener('click',()=>document.getElementById('mobileMenu').classList.toggle('open'));
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const msg = document.getElementById('formMsg');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      setTimeout(() => {
+        msg.style.display = 'block';
+        msg.style.color = '#108653';
+        msg.textContent = '✓ Message sent! We\'ll get back to you within 24-48 hours.';
+        btn.textContent = 'Sent!';
+        document.getElementById('contactForm').reset();
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

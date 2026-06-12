@@ -1,0 +1,21 @@
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+
+# Chrome browser session data (cookies, passwords, cache)
+.chrome-data/
+
+# Dependencies
+node_modules/
+
+# Runtime cache — contains scraped user data
+src/storage/cache.json
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
