@@ -4,6 +4,7 @@ const fs   = require('fs');
 const path = require('path');
 const { normalizeProfileUser, normalizeMetaOnly } = require('./instagramNormalizer');
 const { setCache } = require('./cacheService');
+const proxyService = require('./proxyService');
 
 // ─── Chrome detection ─────────────────────────────────────────────────────────
 const DEFAULT_CHROME = [
@@ -34,16 +35,34 @@ let _pptr = null, _chromePath = null, _browser = null, _launching = null;
 
 function browserReady() { return _browser && _browser.connected; }
 
+function getProxyArgs() {
+  const proxyUrl = proxyService.getCurrentProxy();
+  if (!proxyUrl) return { args: [], auth: null };
+  try {
+    const u = new URL(proxyUrl);
+    return {
+      args: [`--proxy-server=${u.hostname}:${u.port}`],
+      auth: u.username ? { username: decodeURIComponent(u.username), password: decodeURIComponent(u.password || '') } : null
+    };
+  } catch { return { args: [], auth: null }; }
+}
+
+let _proxyAuth = null;
+
 async function getBrowser() {
   if (browserReady()) return _browser;
   if (_launching) return _launching;
   console.log('[browser] Launching persistent Chrome…');
+  const { args: proxyArgs, auth } = getProxyArgs();
+  _proxyAuth = auth;
+  if (proxyArgs.length) console.log('[browser] Using proxy for Chrome');
   _launching = _pptr.launch({
     headless: true, executablePath: _chromePath, userDataDir: CHROME_DATA,
     args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage',
            '--disable-blink-features=AutomationControlled',
            '--disable-features=IsolateOrigins,site-per-process',
-           '--disable-infobars','--disable-extensions','--window-size=1440,900','--lang=en-US,en'],
+           '--disable-infobars','--disable-extensions','--window-size=1440,900','--lang=en-US,en',
+           ...proxyArgs],
     ignoreDefaultArgs: ['--enable-automation'], timeout: 30000
   }).then(b => {
     _browser = b; _launching = null;
@@ -57,6 +76,7 @@ async function getBrowser() {
 async function openPage() {
   const b = await getBrowser();
   const page = await b.newPage();
+  if (_proxyAuth) await page.authenticate(_proxyAuth);
   await page.evaluateOnNewDocument(STEALTH);
   await page.setUserAgent(UA);
   await page.setViewport({ width: 1440, height: 900 });
