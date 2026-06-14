@@ -125,8 +125,13 @@ async function fetchProfileSession(username) {
 
 // ─── Server-side story fetch (uses sessionid from .env) ───────────────────────
 async function fetchStoriesServerSide(userId, username, session) {
-  const sessionId = process.env.INSTAGRAM_SESSION_ID;
-  if (!sessionId || !userId) return [];
+  if (!userId) return [];
+  // Prefer a dedicated story session (older/trusted account) over the main session
+  const storySessionId = process.env.INSTAGRAM_STORY_SESSION_ID || process.env.INSTAGRAM_SESSION_ID;
+  if (!storySessionId) return [];
+  const storySession = storySessionId !== process.env.INSTAGRAM_SESSION_ID
+    ? { ...session, cookie: `sessionid=${decodeURIComponent(storySessionId)}`, csrfToken: session?.csrfToken }
+    : session;
   try {
     const endpoints = [
       `https://www.instagram.com/api/v1/feed/reels_media/?reel_ids=${userId}`,
@@ -134,7 +139,7 @@ async function fetchStoriesServerSide(userId, username, session) {
       `https://www.instagram.com/api/v1/user/${userId}/story/`
     ];
     for (const url of endpoints) {
-      const res = await get(url, buildApiHeaders(username, session));
+      const res = await get(url, buildApiHeaders(username, storySession));
       if (res.status >= 400) continue;
       const data = typeof res.data === 'object' ? res.data : tryJsonParse(res.data);
       if (!data) continue;
