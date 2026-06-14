@@ -32,12 +32,20 @@ const activeBrowserJobs = new Map(); // username → Promise
 function scheduleBrowserFetch(username, cacheKey) {
   if (activeBrowserJobs.has(username)) return; // already running
 
-  // Pass cacheKey so the browser service can write progressive batches to cache
   const job = fetchViaBrowserFallback(username, cacheKey)
-    .then(result => {
-      // igBatch callbacks have already been updating the cache progressively.
-      // Write the final result to ensure the cache is fully up-to-date.
+    .then(async result => {
       if (result?.success) {
+        // Fetch stories via proxy now that we have the real profile ID from browser
+        if (result.profile?.id && process.env.INSTAGRAM_SESSION_ID) {
+          try {
+            const { normalizeStoryItems } = require('./instagramNormalizer');
+            const storyItems = await fetchStoriesServerSide(result.profile.id, username, null);
+            if (storyItems.length) {
+              result.stories = { available: true, items: normalizeStoryItems(storyItems), message: undefined };
+              console.log(`[bg] Stories fetched for @${username}: ${storyItems.length} items`);
+            }
+          } catch {}
+        }
         setCache(cacheKey, result);
         console.log(`[bg] Done @${username}: ${result.posts?.items?.length || 0} posts, ${result.reels?.items?.length || 0} reels`);
       }
