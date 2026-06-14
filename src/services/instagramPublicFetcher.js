@@ -131,38 +131,49 @@ async function fetchProfileSession(username) {
   return { html, cookie, csrfToken, status: res.status };
 }
 
-// ─── Server-side story fetch (uses sessionid from .env) ───────────────────────
+// ─── Server-side story fetch (via proxy) ─────────────────────────────────────
 async function fetchStoriesServerSide(userId, username, session) {
   if (!userId) return [];
-  // Prefer a dedicated story session (older/trusted account) over the main session
+
+  const endpoints = [
+    `https://www.instagram.com/api/v1/feed/reels_media/?reel_ids=${userId}`,
+    `https://www.instagram.com/api/v1/feed/user_story/?user_id=${userId}`,
+    `https://www.instagram.com/api/v1/user/${userId}/story/`
+  ];
+
+  // Try 1: no session — residential proxy IP alone is often enough for public stories
+  try {
+    const anonHeaders = {
+      'User-Agent': PROFILE_UA,
+      'Accept': 'application/json, text/plain, */*',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'X-IG-App-ID': '936619743392459',
+      'X-ASBD-ID': '129477',
+      'Referer': `https://www.instagram.com/${username}/`
+    };
+    for (const url of endpoints) {
+      const res = await get(url, anonHeaders);
+      if (res.status >= 400) continue;
+      const data = typeof res.data === 'object' ? res.data : tryJsonParse(res.data);
+      const items = data?.reels_media?.[0]?.items || data?.reels?.[String(userId)]?.items || data?.story?.items || data?.items || [];
+      if (items.length) { console.log(`[fetcher] Stories (anon proxy): ${items.length} for @${username}`); return items; }
+    }
+  } catch {}
+
+  // Try 2: with session cookie through proxy
   const storySessionId = process.env.INSTAGRAM_STORY_SESSION_ID || process.env.INSTAGRAM_SESSION_ID;
   if (!storySessionId) return [];
-  const storySession = storySessionId !== process.env.INSTAGRAM_SESSION_ID
-    ? { ...session, cookie: `sessionid=${decodeURIComponent(storySessionId)}`, csrfToken: session?.csrfToken }
-    : session;
+  const storySession = { cookie: `sessionid=${decodeURIComponent(storySessionId)}`, csrfToken: session?.csrfToken };
   try {
-    const endpoints = [
-      `https://www.instagram.com/api/v1/feed/reels_media/?reel_ids=${userId}`,
-      `https://www.instagram.com/api/v1/feed/user_story/?user_id=${userId}`,
-      `https://www.instagram.com/api/v1/user/${userId}/story/`
-    ];
     for (const url of endpoints) {
       const res = await get(url, buildApiHeaders(username, storySession));
       if (res.status >= 400) continue;
       const data = typeof res.data === 'object' ? res.data : tryJsonParse(res.data);
-      if (!data) continue;
-      const items =
-        data.reels_media?.[0]?.items ||
-        data.reels?.[String(userId)]?.items ||
-        data.story?.items ||
-        data.items ||
-        [];
-      if (items.length) {
-        console.log(`[fetcher] Stories via server-side HTTP: ${items.length} items for @${username}`);
-        return items;
-      }
+      const items = data?.reels_media?.[0]?.items || data?.reels?.[String(userId)]?.items || data?.story?.items || data?.items || [];
+      if (items.length) { console.log(`[fetcher] Stories (session proxy): ${items.length} for @${username}`); return items; }
     }
   } catch {}
+
   return [];
 }
 
