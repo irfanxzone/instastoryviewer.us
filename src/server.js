@@ -104,7 +104,7 @@ app.get('/api/health', (req, res) => {
 
 // ─── Static Frontend ──────────────────────────────────────────────────────────
 const publicDir = path.join(__dirname, '..', 'public');
-app.use(express.static(publicDir, { maxAge: '1h', etag: true }));
+app.use(express.static(publicDir, { maxAge: isProd ? '1h' : '0', etag: isProd }));
 
 // ─── Clean URLs (no .html extension) ─────────────────────────────────────────
 const cleanPages = ['blog','about','contact','privacy','disclaimer','terms','dmca'];
