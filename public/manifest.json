@@ -1,0 +1,17 @@
+{
+  "name": "Instagram Story Viewer",
+  "short_name": "InstaViewer",
+  "description": "Watch Instagram Stories, Reels and Highlights anonymously. No login required.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#b215a8",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
