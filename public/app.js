@@ -151,14 +151,14 @@ function renderTabsShell() {
   tabs.id = 'ig-tabs';
   tabs.innerHTML = `
     <div class="tabs" role="tablist">
-      <button class="tab active" data-panel="posts"      role="tab">Posts</button>
+      <button class="tab active" data-panel="stories"    role="tab">Stories</button>
+      <button class="tab"        data-panel="posts"      role="tab">Posts</button>
       <button class="tab"        data-panel="reels"      role="tab">Reels</button>
-      <button class="tab"        data-panel="stories"    role="tab">Stories</button>
       <button class="tab"        data-panel="highlights" role="tab">Highlights</button>
     </div>
-    <div class="panel active" id="panel-posts"></div>
+    <div class="panel active" id="panel-stories"></div>
+    <div class="panel"        id="panel-posts"></div>
     <div class="panel"        id="panel-reels"></div>
-    <div class="panel"        id="panel-stories"></div>
     <div class="panel"        id="panel-highlights"></div>`;
   resultShell.appendChild(tabs);
 
@@ -237,7 +237,7 @@ function mediaCard(item, idx, key) {
         </div>
         ${item.caption ? `<p class="media-caption">${esc(item.caption)}</p>` : ''}
         <div class="card-actions">
-          ${dlUrl ? `<a class="card-btn card-btn-dl" href="${esc(dlUrl)}" download target="_blank" rel="noopener">⬇</a>` : ''}
+          ${dlUrl ? `<a class="card-btn card-btn-dl" href="${esc(dlUrl)}" download target="_blank" rel="noopener">Download</a>` : ''}
           ${igUrl ? `<a class="card-btn card-btn-ig" href="${esc(igUrl)}" target="_blank" rel="noopener">↗</a>` : ''}
         </div>
       </div>
