@@ -41,8 +41,8 @@ section{padding:64px 0}.section-title{text-align:center;margin-bottom:38px}.sect
 
 /* ── FAQ smooth ── */
 .faq{max-width:900px;margin:0 auto}
-.faq-item{border:1.5px solid #eceaf4;border-radius:16px;background:#fff;margin-bottom:12px;overflow:hidden;box-shadow:0 2px 12px rgba(31,35,48,.05);transition:box-shadow .25s ease,border-color .25s ease}
-.faq-item.open{box-shadow:0 8px 32px rgba(131,58,180,.13);border-color:rgba(193,53,132,.3)}
+.faq-item{border:1.5px solid #e5e1ee;border-radius:16px;background:#fff;margin-bottom:12px;overflow:hidden;box-shadow:0 8px 22px rgba(31,35,48,.07),0 2px 8px rgba(193,53,132,.04);transition:box-shadow .25s ease,border-color .25s ease}
+.faq-item.open{box-shadow:0 12px 34px rgba(131,58,180,.14),0 4px 14px rgba(193,53,132,.08);border-color:rgba(193,53,132,.3)}
 .faq-q{width:100%;padding:20px 24px;text-align:left;border:0;background:#fff;color:#161922;font-family:Poppins,Arial,sans-serif;font-weight:600;font-size:15.5px;display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;transition:background .2s ease,color .2s ease;line-height:1.4}
 .faq-item.open .faq-q{background:linear-gradient(120deg,#fff9f6 0%,#fdf5ff 100%);color:#b215a8}
 .faq-a{max-height:0;overflow:hidden;padding:0 24px;color:#545766;font-size:15px;line-height:1.78;transition:max-height .42s cubic-bezier(.4,0,.2,1),padding .3s ease}
