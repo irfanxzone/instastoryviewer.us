@@ -5,6 +5,7 @@ const path = require('path');
 const { normalizeProfileUser, normalizeMetaOnly } = require('./instagramNormalizer');
 const { setCache } = require('./cacheService');
 const proxyService = require('./proxyService');
+const igWorkerService = require('./igWorkerService');
 
 // ─── Chrome detection ─────────────────────────────────────────────────────────
 const DEFAULT_CHROME = [
@@ -87,6 +88,11 @@ async function openPage() {
 // ─── Warmup ───────────────────────────────────────────────────────────────────
 async function warmupBrowser() {
   if (process.env.ENABLE_BROWSER_FALLBACK !== 'true') return;
+  if (igWorkerService.hasWorkers()) {
+    await igWorkerService.warmupIgWorkers();
+    console.log('[browser] IG worker browser fallback enabled');
+    return;
+  }
   try { _pptr = require('puppeteer-core'); } catch { console.warn('[browser] puppeteer-core not installed'); return; }
   _chromePath = findChrome();
   if (!_chromePath) { console.warn('[browser] Chrome not found — set CHROME_EXECUTABLE_PATH in .env'); return; }
@@ -261,6 +267,9 @@ function getSessionId() {
 // ─── Main fallback function ───────────────────────────────────────────────────
 async function fetchViaBrowserFallback(username, cacheKey = null) {
   if (process.env.ENABLE_BROWSER_FALLBACK !== 'true') return null;
+  if (igWorkerService.hasWorkers()) {
+    return igWorkerService.fetchViaIgWorkers(username, cacheKey);
+  }
 
   // Self-initialize if warmup never ran (e.g. warmup failed on startup)
   if (!_pptr) {

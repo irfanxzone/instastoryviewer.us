@@ -5,6 +5,7 @@
 
 # Chrome browser session data (cookies, passwords, cache)
 .chrome-data/
+.chrome-data-ig-workers/
 
 # Dependencies
 node_modules/

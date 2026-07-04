@@ -273,6 +273,7 @@ function extractUserFromHtml(html, username) {
 async function fetchAllPublic(username) {
   const cacheKey = `all:${username.toLowerCase()}`;
   let session = null;
+  const useIgWorkers = process.env.ENABLE_BROWSER_FALLBACK === 'true' && Boolean((process.env.IG_WORKERS || '').trim());
 
   try {
     session = await fetchProfileSession(username);
@@ -284,14 +285,26 @@ async function fetchAllPublic(username) {
   if (session) {
     // Fast: try HTML deep extraction (no extra requests, ~0ms)
     const htmlResult = extractUserFromHtml(session.html, username);
-    if (htmlResult?.posts?.items?.length > 0) return htmlResult;
+    if (htmlResult?.posts?.items?.length > 0) {
+      if (useIgWorkers) {
+        scheduleBrowserFetch(username, cacheKey);
+        htmlResult.backgroundLoading = true;
+      }
+      return htmlResult;
+    }
 
     // Fast: try Instagram API endpoints — hard cap at 2.5s so we never block the user
     const apiResult = await Promise.race([
       sweepEndpoints(username, session),
       new Promise(r => setTimeout(() => r(null), 2500))
     ]);
-    if (apiResult && !apiResult.blocked && apiResult?.posts?.items?.length > 0) return apiResult;
+    if (apiResult && !apiResult.blocked && apiResult?.posts?.items?.length > 0) {
+      if (useIgWorkers) {
+        scheduleBrowserFetch(username, cacheKey);
+        apiResult.backgroundLoading = true;
+      }
+      return apiResult;
+    }
 
     // Schedule full browser fetch in background — returns in ~20s, stored in cache
     if (process.env.ENABLE_BROWSER_FALLBACK === 'true') {

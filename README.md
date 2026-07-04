@@ -49,6 +49,21 @@ Examples:
 
 This project does not bypass private accounts, login walls, or Instagram restrictions. Stories/highlights for arbitrary accounts are usually not exposed to unauthenticated public requests. The API is structured to support them, but if Instagram blocks or hides them, the UI will show a clean message instead of fake data.
 
+## Instagram worker sessions
+
+For reliable public story loading, configure fixed Instagram worker identities in `.env`:
+
+```bash
+IG_WORKERS="sessionid|host:port:user:pass
+sessionid|http://user:pass@host:port"
+IG_WORKER_PREFERRED_INDEX=2
+IG_WORKER_FETCH_ATTEMPTS=3
+IG_WORKER_FAILURE_COOLDOWN_MS=600000
+IG_WORKER_ACQUIRE_TIMEOUT_MS=45000
+```
+
+Each worker gets its own persistent Chrome profile under `.chrome-data-ig-workers/`, uses its own sticky residential proxy, and injects `sessionid` plus `ds_user_id` before fetching Instagram in real Chrome. Keep real session IDs and proxy credentials only in `.env` or server environment.
+
 ## Deploy for high traffic
 
 For serious traffic, put this behind:
