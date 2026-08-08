@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
@@ -15,6 +15,13 @@
     <lastmod>2026-07-01T06:42:41+05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://instastoryviewer.us/how-to-watch-instagram-stories</loc>
+    <lastmod>2026-08-08T18:53:57+05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <url>
@@ -124,3 +131,5 @@
   </url> -->
 
 </urlset>
+
+

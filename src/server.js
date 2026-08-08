@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 require('dotenv').config();
 
@@ -113,6 +113,10 @@ cleanPages.forEach(p => {
 });
 
 // Blog posts clean URLs
+app.get('/how-to-watch-instagram-stories', (req, res) => {
+  res.sendFile(path.join(publicDir, 'how-to-watch-instagram-stories.html'));
+});
+
 app.get('/blog/:slug', (req, res) => {
   const file = path.join(publicDir, 'blog', `${req.params.slug}.html`);
   if (require('fs').existsSync(file)) return res.sendFile(file);
@@ -153,3 +157,4 @@ if (require.main === module) {
     }
   });
 }
+
