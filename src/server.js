@@ -125,6 +125,10 @@ app.get('/how-to-watch-instagram-stories', (req, res) => {
   res.sendFile(path.join(publicDir, 'how-to-watch-instagram-stories.html'));
 });
 
+app.get('/instagram-story-viewer-competitor-analysis', (req, res) => {
+  res.sendFile(path.join(publicDir, 'instagram-story-viewer-competitor-analysis.html'));
+});
+
 app.get('/blog/:slug', (req, res) => {
   const file = path.join(publicDir, 'blog', `${req.params.slug}.html`);
   if (require('fs').existsSync(file)) return res.sendFile(file);
