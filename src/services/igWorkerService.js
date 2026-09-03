@@ -145,6 +145,16 @@ function isBadInstagramUrl(url) {
   return BAD_URL_PARTS.some(part => String(url || '').includes(part));
 }
 
+function isBadWorkerPayload(payload) {
+  const status = Number(payload?.profileStatus || 0);
+  const message = String(payload?.profileMessage || '');
+  return (
+    [401, 403, 429].includes(status) ||
+    payload?.loginRequired === true ||
+    /login|required|challenge|checkpoint|suspended|scraping_warning|please wait/i.test(message)
+  );
+}
+
 function isWorkerHealthy(worker) {
   return !worker.busy && Date.now() >= worker.failedUntil;
 }
@@ -317,7 +327,14 @@ const WORKER_IN_PAGE_SCRIPT = async function(username) {
   const init = await getJson(`/api/v1/users/web_profile_info/?username=${encodeURIComponent(username)}`);
   const user = init.data?.data?.user || init.data?.data?.xdt_api__v1__users__web_profile_info?.user || init.data?.user;
   if (!user || (!user.username && !user.id)) {
-    return { ok: false, finalUrl: location.href, profileStatus: init.status };
+    return {
+      ok: false,
+      finalUrl: location.href,
+      profileStatus: init.status,
+      loginRequired: Boolean(init.data?.require_login),
+      profileApiStatus: typeof init.data?.status === 'string' ? init.data.status : '',
+      profileMessage: typeof init.data?.message === 'string' ? init.data.message.slice(0, 160) : ''
+    };
   }
 
   const uid = user.id || user.pk;
@@ -474,6 +491,8 @@ async function fetchWithWorker(worker, username, cacheKey) {
 
     await new Promise(resolve => setTimeout(resolve, 1500));
     const payload = await page.evaluate(WORKER_IN_PAGE_SCRIPT, username);
+    const sessionCookiePresent = (await page.cookies('https://www.instagram.com'))
+      .some(cookie => cookie.name === 'sessionid' && cookie.value);
 
     if (isBadInstagramUrl(payload?.finalUrl || page.url())) {
       const err = new Error(`bad Instagram redirect: ${payload?.finalUrl || page.url()}`);
@@ -482,6 +501,12 @@ async function fetchWithWorker(worker, username, cacheKey) {
     }
 
     if (!payload?.ok || !payload.user) {
+      if (!sessionCookiePresent || isBadWorkerPayload(payload)) {
+        const status = Number(payload?.profileStatus || 0);
+        const err = new Error('Instagram rejected worker session (profile status ' + (status || 'unknown') + ')');
+        err.badWorker = true;
+        throw err;
+      }
       const html = await page.content();
       return normalizeMetaOnly(username, html);
     }

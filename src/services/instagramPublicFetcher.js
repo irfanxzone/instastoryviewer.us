@@ -29,12 +29,23 @@ const PROFILE_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
 // The result is written to cache so the frontend's auto-poll picks it up.
 const activeBrowserJobs = new Map(); // username → Promise
 
+function hasUsefulBrowserResult(result) {
+  return Boolean(
+    result?.success && (
+      result?.profile?.id ||
+      result?.posts?.items?.length ||
+      result?.reels?.items?.length ||
+      result?.stories?.items?.length
+    )
+  );
+}
+
 function scheduleBrowserFetch(username, cacheKey) {
   if (activeBrowserJobs.has(username)) return; // already running
 
   const job = fetchViaBrowserFallback(username, cacheKey)
     .then(async result => {
-      if (result?.success) {
+      if (hasUsefulBrowserResult(result)) {
         // Fetch stories via proxy now that we have the real profile ID from browser
         if (result.profile?.id && process.env.INSTAGRAM_SESSION_ID) {
           try {
