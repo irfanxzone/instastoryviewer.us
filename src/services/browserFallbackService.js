@@ -3,7 +3,7 @@
 const fs   = require('fs');
 const path = require('path');
 const { normalizeProfileUser, normalizeMetaOnly } = require('./instagramNormalizer');
-const { setCache } = require('./cacheService');
+const { setCacheMerged } = require('./cacheService');
 const proxyService = require('./proxyService');
 const igWorkerService = require('./igWorkerService');
 
@@ -336,7 +336,7 @@ async function fetchViaBrowserFallback(username, cacheKey = null) {
               reelsLoaded: accReels.length
             };
           }
-          setCache(cacheKey, result);
+          setCacheMerged(cacheKey, result);
           if (accPosts.length > 12) {
             console.log(`[browser] Cache updated: ${accPosts.length}/${totalCount || '?'} posts, ${accReels.length} reels`);
           }

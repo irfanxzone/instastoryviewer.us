@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { normalizeProfileUser, normalizeMetaOnly } = require('./instagramNormalizer');
-const { setCache } = require('./cacheService');
+const { setCacheMerged } = require('./cacheService');
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 const STEALTH = `
@@ -290,7 +290,7 @@ function buildSyntheticUser(rawUser, accPosts, accReels, totalCount, stories, hi
   };
 }
 
-const WORKER_IN_PAGE_SCRIPT = async function(username) {
+const WORKER_IN_PAGE_SCRIPT = async function(username, includeStories) {
   const csrf = document.cookie.match(/csrftoken=([^;]+)/)?.[1] || '';
   const headers = {
     'X-IG-App-ID': '936619743392459',
@@ -349,19 +349,21 @@ const WORKER_IN_PAGE_SCRIPT = async function(username) {
     await window.igWorkerSnapshot({ user, posts, reels, stories, highlights, totalPosts, done: Boolean(done) });
   }
 
-  const storyEndpoints = [
-    `/api/v1/feed/reels_media/?reel_ids=${uid}`,
-    `/api/v1/feed/user_story/?user_id=${uid}`,
-    `/api/v1/user/${uid}/story/`
-  ];
+  if (includeStories) {
+    const storyEndpoints = [
+      `/api/v1/feed/reels_media/?reel_ids=${uid}`,
+      `/api/v1/feed/user_story/?user_id=${uid}`,
+      `/api/v1/user/${uid}/story/`
+    ];
 
-  for (const endpoint of storyEndpoints) {
-    const response = await getJson(endpoint);
-    const items = storyItems(response.data, uid);
-    if (window.igStoryLog) await window.igStoryLog({ endpoint, status: response.status, count: items.length });
-    if (items.length) {
-      stories.push(...items);
-      break;
+    for (const endpoint of storyEndpoints) {
+      const response = await getJson(endpoint);
+      const items = storyItems(response.data, uid);
+      if (window.igStoryLog) await window.igStoryLog({ endpoint, status: response.status, count: items.length });
+      if (items.length) {
+        stories.push(...items);
+        break;
+      }
     }
   }
   await snapshot(false);
@@ -464,7 +466,7 @@ async function fetchWithWorker(worker, username, cacheKey) {
             reelsLoaded: result.reels?.items?.length || 0
           };
         }
-        setCache(cacheKey, result);
+        setCacheMerged(cacheKey, result);
       } catch (err) {
         console.warn(`[ig-workers] ${worker.id} cache snapshot failed: ${err.message}`);
       }
@@ -490,7 +492,11 @@ async function fetchWithWorker(worker, username, cacheKey) {
     }
 
     await new Promise(resolve => setTimeout(resolve, 1500));
-    const payload = await page.evaluate(WORKER_IN_PAGE_SCRIPT, username);
+    const payload = await page.evaluate(
+      WORKER_IN_PAGE_SCRIPT,
+      username,
+      !String(process.env.OPENHANDLE_API_KEY || '').trim()
+    );
     const sessionCookiePresent = (await page.cookies('https://www.instagram.com'))
       .some(cookie => cookie.name === 'sessionid' && cookie.value);
 
@@ -505,6 +511,7 @@ async function fetchWithWorker(worker, username, cacheKey) {
         const status = Number(payload?.profileStatus || 0);
         const err = new Error('Instagram rejected worker session (profile status ' + (status || 'unknown') + ')');
         err.badWorker = true;
+        err.rateLimited = status === 429;
         throw err;
       }
       const html = await page.content();
@@ -521,7 +528,7 @@ async function fetchWithWorker(worker, username, cacheKey) {
     );
     const result = normalizeProfileUser(synthetic, 'instagram_worker_browser');
     if (cacheKey && result.success && result.stories?.items?.length) {
-      setCache(cacheKey, result);
+      setCacheMerged(cacheKey, result);
     }
 
     console.log(`[browser] @${username} done: ${result.posts?.items?.length || 0} posts, ${result.reels?.items?.length || 0} reels, ${result.stories?.items?.length || 0} stories`);
@@ -560,6 +567,7 @@ async function fetchViaIgWorkers(username, cacheKey = null) {
 
     try {
       const result = await fetchWithWorker(worker, username, cacheKey);
+      if (process.env.OPENHANDLE_API_KEY && hasProfileOrMedia(result)) return result;
       if (storyCount(result) > 0) return result;
 
       if (hasProfileOrMedia(result)) {
@@ -574,6 +582,10 @@ async function fetchViaIgWorkers(username, cacheKey = null) {
     } catch (err) {
       if (err.badWorker) {
         pauseWorker(worker, err.message);
+        if (err.rateLimited) {
+          console.warn(`[ig-workers] @${username} rate limited; stopping worker cascade`);
+          return bestResult;
+        }
       } else {
         console.warn(`[ig-workers] ${worker.id} failed @${username}: ${err.message}`);
       }

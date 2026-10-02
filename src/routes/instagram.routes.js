@@ -2,15 +2,16 @@
 
 const express = require('express');
 const { resolveInstagramInput } = require('../services/inputResolver');
-const { getCache, setCache, deleteCache } = require('../services/cacheService');
+const { getCache, setCacheMerged } = require('../services/cacheService');
 const { fetchAllPublic, hasPendingBrowserJob } = require('../services/instagramPublicFetcher');
 
 const router = express.Router();
+const activeLoads = new Map();
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function cacheKey(username) {
-  return `all:${username.toLowerCase()}`;
+  return `all:hybrid-v4:${username.toLowerCase()}`;
 }
 
 function metaBlock(cached) {
@@ -31,6 +32,23 @@ function httpStatusFor(data) {
   }
 }
 
+function loadOnce(username, key) {
+  const lockKey = username.toLowerCase();
+  if (activeLoads.has(lockKey)) {
+    console.log(`[requests] Joined existing fetch for @${lockKey}`);
+    return activeLoads.get(lockKey);
+  }
+
+  const job = fetchAllPublic(username)
+    .then(fresh => {
+      setCacheMerged(key, fresh);
+      return fresh;
+    })
+    .finally(() => activeLoads.delete(lockKey));
+  activeLoads.set(lockKey, job);
+  return job;
+}
+
 async function resolveAndLoad(rawInput, { forceRefresh = false } = {}) {
   const resolved = resolveInstagramInput(rawInput);
   if (!resolved.username) {
@@ -44,29 +62,27 @@ async function resolveAndLoad(rawInput, { forceRefresh = false } = {}) {
 
   const key = cacheKey(resolved.username);
 
-  if (forceRefresh) deleteCache(key);
-
-  // Try fresh cache first
   const cached = getCache(key, { allowStale: true });
   if (cached && !cached.stale && !forceRefresh) {
     return { data: cached.data, cached };
   }
 
-  // Fetch from Instagram
-  let fresh;
+  if (cached?.stale && !forceRefresh) {
+    loadOnce(resolved.username, key).catch(() => {});
+    return { data: cached.data, cached };
+  }
+
   try {
-    fresh = await fetchAllPublic(resolved.username);
-    setCache(key, fresh);
+    const fresh = await loadOnce(resolved.username, key);
     return { data: fresh, cached: null };
   } catch (fetchErr) {
-    // On upstream failure, serve stale cache with warning
-    if (cached?.stale) {
+    if (cached) {
       return {
         data: {
           ...cached.data,
-          source: 'stale_cache_after_instagram_block',
+          source: 'stale_cache_after_provider_failure',
           stale: true,
-          warning: 'Fresh Instagram request failed, showing cached public data.'
+          warning: 'Fresh provider data is temporarily unavailable. Showing cached public data.'
         },
         cached
       };
@@ -102,8 +118,9 @@ router.get('/all/:input', async (req, res, next) => {
     const pending = data.backgroundLoading && hasPendingBrowserJob(resolved.username);
     res.status(status).json({
       ...data,
+      backgroundLoading: pending,
       meta: metaBlock(cached),
-      ...(pending ? { backgroundLoading: true, pollAfterMs: 14000 } : {})
+      ...(pending ? { pollAfterMs: 14000 } : {})
     });
   } catch (err) {
     next(err);

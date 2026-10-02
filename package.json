@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "NODE_ENV=development node src/server.js",
-    "test:resolver": "node src/utils/selfTest.js"
+    "test:resolver": "node src/utils/selfTest.js",
+    "test:providers": "node src/utils/providerSelfTest.js"
   },
   "dependencies": {
     "axios": "^1.7.9",

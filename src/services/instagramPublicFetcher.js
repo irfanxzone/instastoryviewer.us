@@ -6,7 +6,13 @@ const { normalizeProfileUser, normalizeMetaOnly } = require('./instagramNormaliz
 const { fetchViaBrowserFallback } = require('./browserFallbackService');
 const { isLoginWallText, isBlockedResponse, NotFoundError } = require('../utils/errors');
 const proxyService = require('./proxyService');
-const { setCache } = require('./cacheService');
+const { setCacheMerged } = require('./cacheService');
+const {
+  isConfigured: isOpenHandleConfigured,
+  fetchProfileViaOpenHandle,
+  fetchStoriesViaOpenHandle,
+  fetchMediaViaOpenHandle
+} = require('./openHandleService');
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 function getQueryHashes() {
@@ -29,6 +35,101 @@ const PROFILE_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
 // The result is written to cache so the frontend's auto-poll picks it up.
 const activeBrowserJobs = new Map(); // username → Promise
 
+function unavailableSection(section, error) {
+  const rateLimited = error?.status === 429;
+  const label = section[0].toUpperCase() + section.slice(1);
+  return {
+    available: false,
+    items: [],
+    source: 'openhandle',
+    state: rateLimited ? 'RATE_LIMITED' : 'TEMPORARILY_UNAVAILABLE',
+    message: rateLimited
+      ? `${label} are temporarily rate limited. Please try again shortly.`
+      : `${label} could not be loaded right now. Please try again shortly.`
+  };
+}
+
+function privateStories() {
+  return {
+    available: false,
+    items: [],
+    source: 'openhandle',
+    state: 'PRIVATE',
+    message: 'This account is private. Stories are not publicly available.'
+  };
+}
+
+async function attachOpenHandleFallbacks(username, result) {
+  if (!isOpenHandleConfigured() || !result?.success) return result;
+
+  if (!result.profile?.id) {
+    try {
+      const profile = await fetchProfileViaOpenHandle(username);
+      result.profile = { ...(result.profile || {}), ...profile };
+      result.status = profile.isPrivate ? 'PRIVATE_ACCOUNT' : 'PUBLIC_ACCOUNT';
+      result.partial = false;
+      result.source = `${result.source || 'instagram_public'}+openhandle_profile`;
+    } catch (error) {
+      console.warn(`[openhandle:profile] Failed @${username}: HTTP ${error.status || 'network'}`);
+      if (!result.profile?.id) throw error;
+    }
+  }
+
+  if (result.profile?.isPrivate) {
+    result.stories = privateStories();
+    result.backgroundLoading = false;
+    return result;
+  }
+
+  try {
+    result.stories = await fetchStoriesViaOpenHandle(username);
+    result.source = `${result.source || 'instagram_public'}+openhandle_stories`;
+  } catch (error) {
+    console.warn(`[openhandle:stories] Failed @${username}: HTTP ${error.status || 'network'}`);
+    result.stories = unavailableSection('stories', error);
+  }
+
+  const missing = ['posts', 'reels'].filter(section => !result[section]?.items?.length);
+  const fetched = await Promise.allSettled(
+    missing.map(section => fetchMediaViaOpenHandle(username, section))
+  );
+  fetched.forEach((entry, index) => {
+    const section = missing[index];
+    if (entry.status === 'fulfilled') {
+      result[section] = entry.value;
+      result.source = `${result.source || 'instagram_public'}+openhandle_${section}_fallback`;
+    } else {
+      console.warn(`[openhandle:${section}:fallback] Failed @${username}: HTTP ${entry.reason?.status || 'network'}`);
+      result[section] = unavailableSection(section, entry.reason);
+    }
+  });
+  return result;
+}
+
+function openHandleResult(profile) {
+  const privateAccount = profile.isPrivate;
+  const unavailable = section => ({
+    available: false,
+    items: [],
+    state: privateAccount ? 'PRIVATE' : 'TEMPORARILY_UNAVAILABLE',
+    message: privateAccount
+      ? `This account is private. ${section} are not publicly available.`
+      : `${section} could not be loaded right now. Please try again shortly.`
+  });
+  return {
+    success: true,
+    source: 'openhandle_profile',
+    fetchedAt: new Date().toISOString(),
+    status: privateAccount ? 'PRIVATE_ACCOUNT' : 'PUBLIC_ACCOUNT',
+    profile,
+    stories: privateAccount ? privateStories() : unavailable('Stories'),
+    highlights: unavailable('Highlights'),
+    posts: unavailable('Posts'),
+    reels: unavailable('Reels'),
+    backgroundLoading: false
+  };
+}
+
 function hasUsefulBrowserResult(result) {
   return Boolean(
     result?.success && (
@@ -41,13 +142,16 @@ function hasUsefulBrowserResult(result) {
 }
 
 function scheduleBrowserFetch(username, cacheKey) {
-  if (activeBrowserJobs.has(username)) return; // already running
+  const key = username.toLowerCase();
+  if (activeBrowserJobs.has(key)) return; // already running
 
   const job = fetchViaBrowserFallback(username, cacheKey)
     .then(async result => {
       if (hasUsefulBrowserResult(result)) {
-        // Fetch stories via proxy now that we have the real profile ID from browser
-        if (result.profile?.id && process.env.INSTAGRAM_SESSION_ID) {
+        // OpenHandle is authoritative for Stories when configured.
+        if (isOpenHandleConfigured()) {
+          result.stories = unavailableSection('stories');
+        } else if (result.profile?.id && process.env.INSTAGRAM_SESSION_ID) {
           try {
             const { normalizeStoryItems } = require('./instagramNormalizer');
             const storyItems = await fetchStoriesServerSide(result.profile.id, username, null);
@@ -57,14 +161,14 @@ function scheduleBrowserFetch(username, cacheKey) {
             }
           } catch {}
         }
-        setCache(cacheKey, result);
+        setCacheMerged(cacheKey, result);
         console.log(`[bg] Done @${username}: ${result.posts?.items?.length || 0} posts, ${result.reels?.items?.length || 0} reels`);
       }
     })
     .catch(err => console.warn(`[bg] Browser fetch failed @${username}: ${err?.message}`))
-    .finally(() => activeBrowserJobs.delete(username));
+    .finally(() => activeBrowserJobs.delete(key));
 
-  activeBrowserJobs.set(username, job);
+  activeBrowserJobs.set(key, job);
 }
 
 function hasPendingBrowserJob(username) {
@@ -282,7 +386,7 @@ function extractUserFromHtml(html, username) {
 
 // ─── Main entry point ─────────────────────────────────────────────────────────
 async function fetchAllPublic(username) {
-  const cacheKey = `all:${username.toLowerCase()}`;
+  const cacheKey = `all:hybrid-v4:${username.toLowerCase()}`;
   let session = null;
   const useIgWorkers = process.env.ENABLE_BROWSER_FALLBACK === 'true' && Boolean((process.env.IG_WORKERS || '').trim());
 
@@ -301,7 +405,7 @@ async function fetchAllPublic(username) {
         scheduleBrowserFetch(username, cacheKey);
         htmlResult.backgroundLoading = true;
       }
-      return htmlResult;
+      return attachOpenHandleFallbacks(username, htmlResult);
     }
 
     // Fast: try Instagram API endpoints — hard cap at 2.5s so we never block the user
@@ -314,7 +418,7 @@ async function fetchAllPublic(username) {
         scheduleBrowserFetch(username, cacheKey);
         apiResult.backgroundLoading = true;
       }
-      return apiResult;
+      return attachOpenHandleFallbacks(username, apiResult);
     }
 
     // Schedule full browser fetch in background — returns in ~20s, stored in cache
@@ -326,7 +430,7 @@ async function fetchAllPublic(username) {
     // server-side right now (only works when INSTAGRAM_SESSION_ID is set in .env)
     const partial = (htmlResult?.profile?.username) ? htmlResult : normalizeMetaOnly(username, session.html);
 
-    if (partial?.profile?.id && process.env.INSTAGRAM_SESSION_ID) {
+    if (!isOpenHandleConfigured() && partial?.profile?.id && process.env.INSTAGRAM_SESSION_ID) {
       const storyItems = await fetchStoriesServerSide(partial.profile.id, username, session);
       if (storyItems.length && partial.stories) {
         const { normalizeStoryItems } = require('./instagramNormalizer');
@@ -338,12 +442,25 @@ async function fetchAllPublic(username) {
     }
 
     partial.backgroundLoading = process.env.ENABLE_BROWSER_FALLBACK === 'true';
-    return partial;
+    return attachOpenHandleFallbacks(username, partial);
   }
 
   // No session at all — run browser directly (blocking)
   const browserResult = await fetchViaBrowserFallback(username).catch(() => null);
-  if (browserResult) return browserResult;
+  if (browserResult) return attachOpenHandleFallbacks(username, browserResult);
+
+  if (isOpenHandleConfigured()) {
+    try {
+      const profile = await fetchProfileViaOpenHandle(username);
+      return attachOpenHandleFallbacks(username, openHandleResult(profile));
+    } catch (error) {
+      if (error.status === 404) {
+        error.name = 'NotFoundError';
+        error.message = 'Profile not found. Check the username and try again.';
+      }
+      throw error;
+    }
+  }
 
   const err = new Error('Could not reach Instagram. Try again shortly.');
   err.status = 503; err.igStatus = 'BLOCKED_OR_RATE_LIMITED';
