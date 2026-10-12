@@ -34,175 +34,15 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/manifest.json" />
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=headings-20260705" />
+  <link rel="preload" href="/instagram-story-viewer-400.webp" as="image" type="image/webp" imagesrcset="/instagram-story-viewer-400.webp 400w, /instagram-story-viewer-640.webp 640w, /instagram-story-viewer-800.webp 800w, /instagram-story-viewer.webp 1280w" imagesizes="(max-width: 620px) 52vw, (max-width: 1000px) 92vw, 920px" fetchpriority="high">
+  <style>
+:root{--grad:linear-gradient(120deg,#f3b15e 0%,#c95c76 34%,#b215a8 68%,#6f35bd 100%);--text:#1f2330}*{box-sizing:border-box}html{scroll-behavior:smooth;scrollbar-gutter:stable}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:#fff;font-size:16px;line-height:1.65}a{text-decoration:none;color:inherit}.container{max-width:1180px;margin:0 auto;padding:0 24px}.site-top{background:var(--grad);color:#fff;position:relative;z-index:5}.nav{height:74px;display:flex;align-items:center;justify-content:space-between;gap:28px}.brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700}.brand-icon-wrap{display:flex;align-items:center;flex-shrink:0}.brand-text{line-height:1.05;font-size:18px}.brand-text small{display:block;font-size:10px;font-weight:400;opacity:.92;letter-spacing:.05em}.nav-links{display:flex;align-items:center;gap:48px;font-size:14px;font-weight:600}.nav-cta{background:#1f0825;color:#fff;border-radius:8px;padding:11px 18px;font-size:14px;font-weight:700;box-shadow:0 10px 24px rgba(0,0,0,.16)}.menu-btn{display:none;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;width:42px;height:40px;font-size:21px}.mobile-menu{display:none}.hero{position:relative;overflow:hidden;text-align:center;color:#fff;background:var(--grad);padding:46px 24px 58px;border-bottom-right-radius:80px;border-bottom-left-radius:80px;clip-path:inset(0 0 0 0 round 0 0 80px 80px);isolation:isolate}.hero:before{content:"";position:absolute;width:390px;height:390px;border-radius:50%;left:-160px;top:-120px;background:rgba(255,255,255,.2);z-index:-1}.hero:after{content:"";position:absolute;width:520px;height:255px;border-radius:0 0 0 260px;right:0;top:0;background:rgba(255,255,255,.13);z-index:-1}.hero h1{font-size:42px;line-height:1.22;font-weight:600;letter-spacing:.055em;margin:0 auto 14px;max-width:980px;color:#fff}.hero p{font-size:18px;line-height:1.5;max-width:980px;margin:0 auto 38px;color:rgba(255,255,255,.94);font-weight:400}.search-box{max-width:630px;margin:0 auto;display:flex;gap:6px;align-items:stretch}.input-shell{height:52px;flex:1;background:#fff;border:1px solid #3c44ef;border-radius:5px;display:flex;align-items:center;overflow:hidden}.link-icon{width:50px;color:#3330ed;font-size:23px;font-weight:700;display:grid;place-items:center}.input-shell input{width:100%;height:100%;border:0;outline:0;padding:0 10px 0 0;font-family:inherit;font-size:16px;color:#333;background:#fff}.paste-icon{width:42px;height:42px;margin-right:4px;border-radius:7px;border:1px solid #ccd0ff;background:#f4f5ff;color:#3330ed;display:grid;place-items:center}.search-box>button{height:52px;min-width:145px;border:0;border-radius:5px;background:#210724;color:#fff;font-family:inherit;font-size:18px;font-weight:700}.status{min-height:22px;margin-top:9px;color:rgba(255,255,255,.95);font-size:14px;font-weight:500}.results-section[hidden]{display:none}html:not(.styles-loaded) main>section:not(.hero):not(.results-section),html:not(.styles-loaded) footer{content-visibility:hidden;contain-intrinsic-size:760px}@media(max-width:920px){.nav-links,.nav-cta{display:none}.menu-btn{display:block}.hero h1{font-size:34px}}@media(max-width:620px){.container{padding:0 18px}.nav{height:66px}.hero{padding:36px 18px 44px;border-bottom-right-radius:50px;border-bottom-left-radius:50px;clip-path:inset(0 0 0 0 round 0 0 50px 50px)}.hero h1{font-size:30px;letter-spacing:.025em}.hero p{font-size:15.5px;margin-bottom:28px}.search-box{display:block}.paste-icon{display:none}.search-box>button{width:100%;margin-top:9px}.brand-text{font-size:16px}}
+  </style>
+  <link rel="preload" href="/style.css?v=performance-20261012" as="style" onload="this.onload=null;this.rel='stylesheet';requestAnimationFrame(()=>document.documentElement.classList.add('styles-loaded'))">
+  <noscript><link rel="stylesheet" href="/style.css?v=performance-20261012"><style>main>section:not(.hero):not(.results-section),footer{display:block}</style></noscript>
 
-  <!-- Schema Markup -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://instastoryviewer.us/#website",
-        "url": "https://instastoryviewer.us/",
-        "name": "Instagram Story Viewer",
-        "description": "Free anonymous Instagram Story Viewer. Watch Stories, Reels and Highlights without login.",
-        "inLanguage": "en-US",
-        "publisher": { "@id": "https://instastoryviewer.us/#organization" },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": { "@type": "EntryPoint", "urlTemplate": "https://instastoryviewer.us/?u={search_term_string}" },
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://instastoryviewer.us/#organization",
-        "name": "Instagram Story Viewer",
-        "url": "https://instastoryviewer.us/",
-        "logo": { "@type": "ImageObject", "url": "https://instastoryviewer.us/logo.svg" },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "email": "instastoryviewer.us@gmail.com",
-          "contactType": "customer support",
-          "availableLanguage": ["English"]
-        },
-        "sameAs": [
-          "https://www.linkedin.com/in/instastoryviewer-undefined-3940a041a",
-          "https://x.com/instasusa",
-          "https://www.instagram.com/instastoryviewer.us/"
-        ]
-      },
-      {
-        "@type": "WebApplication",
-        "@id": "https://instastoryviewer.us/#webapp",
-        "name": "Instagram Story Viewer",
-        "url": "https://instastoryviewer.us/",
-        "description": "Free anonymous Instagram Story Viewer. Watch Stories, Reels and Highlights without login.",
-        "applicationCategory": "SocialNetworkingApplication",
-        "operatingSystem": "Web, iOS, Android, Windows, macOS",
-        "browserRequirements": "Requires JavaScript. Works in all modern browsers.",
-        "inLanguage": "en-US",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "featureList": [
-          "Watch Stories Anonymously",
-          "Download Stories",
-          "Download Reels",
-          "View Highlights",
-          "No Account Required",
-          "No Login",
-          "100% Free"
-        ]
-      },
-      {
-        "@type": "Article",
-        "@id": "https://instastoryviewer.us/#article",
-        "headline": "Instagram Story Viewer Watch & Download Stories Anonymously",
-        "description": "Free Instagram Story Viewer to watch Stories, Reels and Highlights from public accounts anonymously. No login, no account required – 100% anonymous.",
-        "url": "https://instastoryviewer.us/",
-        "datePublished": "2026-09-03T12:23:52-04:00",
-        "dateModified": "2026-09-03T12:23:52-04:00",
-        "author": { "@id": "https://instastoryviewer.us/#organization" },
-        "publisher": { "@id": "https://instastoryviewer.us/#organization" },
-        "mainEntityOfPage": { "@id": "https://instastoryviewer.us/#website" },
-        "inLanguage": "en-US",
-        "articleSection": ["Instagram Stories", "Social Media Tools", "Privacy Tools"],
-        "keywords": ["Instagram Story Viewer", "anonymous story viewer", "watch Instagram stories anonymously", "Instagram stories no login", "Instagram reels viewer"],
-        "image": {
-          "@type": "ImageObject",
-          "url": "https://instastoryviewer.us/logo.svg",
-          "width": 1200,
-          "height": 630
-        }
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://instastoryviewer.us/#faq",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How do I watch Instagram stories without an account on any device?",
-            "acceptedAnswer": { "@type": "Answer", "text": "The easiest method of watching the stories without an account is to visit the Story Viewer on your device, enter the username or account details of the respective creator and tap the search. Now the Reels and Stories related to that account opens up. This process does not require your personal information." }
-          },
-          {
-            "@type": "Question",
-            "name": "Does Instagram Story Viewer store my data?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No, to keep your privacy intact, we do not collect your personal credentials and never ask for account details. Moreover, the details, search history and watch history are never stored on our servers." }
-          },
-          {
-            "@type": "Question",
-            "name": "Do I need to login or register?",
-            "acceptedAnswer": { "@type": "Answer", "text": "The tool allows you to explore the platform without login, you can directly explore the profiles of your choice." }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the distinction between Instagram Stories and Highlights?",
-            "acceptedAnswer": { "@type": "Answer", "text": "On the official Instagram app, the stories and highlights resemble each other whereas used for diverse purposes. Instagram stories are short videos or photos that appear at the top of the feed but automatically deleted after 24 hours. In contrast, the highlights are the stories that you have saved in your account for later and can be accessed anytime. You can open your bio and get the highlights under that section." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can Instagram content creators see anonymous story views?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No, using the Story Viewer, you can follow the stories of the content creators or influencers without letting them know. The built-in incognito mode keeps your identity confidential without storing information. That is why, the creator never tracks your viewing activity and remains unable to list you in the viewers list." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I explore Private Instagram Stories?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No, all the private Instagram accounts are secured with Instagram's built-in security that restrict any third party tool to access the content. For that reason, the Story Viewer limits you to discover private accounts; only public profiles can be accessed using the Insta story viewer." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I view Instagram Stories anonymously?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Absolutely, you can check any public account stories and keep yourself hidden without appearing in the viewer's list since the tool does not retain your personal records or account details and helps you stay anonymous and navigate content without drawing attention of the creator." }
-          },
-          {
-            "@type": "Question",
-            "name": "How much does the Instagram Story Viewer cost?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Our Instagram Story Viewer is free of cost plus it does not demand subscriptions after a certain time-period. You can check its premium features like anonymity, privacy, and no login requirements free without spending money." }
-          },
-          {
-            "@type": "Question",
-            "name": "Is Stories Viewer Safe?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, the Instagram story viewer is a safe and reliable tool since it follows SSL encryption methods to enhance the performance and ensure flexible usage. Unlike other tools, this viewer does not ask for creating an account or registration prior to use." }
-          },
-          {
-            "@type": "Question",
-            "name": "How can I view someone else's Instagram profiles without logging in?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No, account creation or any type of registration is not required to explore public Instagram profiles. Just scroll upwards and enter the username of the person you want to see the profile and the entire story feed along with account information opens up on your screen." }
-          },
-          {
-            "@type": "Question",
-            "name": "Which device can I use to view stories?",
-            "acceptedAnswer": { "@type": "Answer", "text": "The online Instagram Story Viewer is easily accessed with any device. Whether you are using iPhone, iPad, Android, or PC (Windows), there are no limitations for devices and the media can be watched and downloaded conveniently." }
-          },
-          {
-            "@type": "Question",
-            "name": "Is anonymity maintained when downloading photos and videos?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Definitely, the discreet settings remain intact, no matter you are downloading videos, photos, watching stories or reels. You can freely enjoy the platform's open access to the material without leaving any trace for the original creator being notified." }
-          },
-          {
-            "@type": "Question",
-            "name": "Is it a legal method to search Instagram Stories in anonymous mode?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, all the public information that is available on Instagram is legal to browse, you can visit any account and its stories as long as you access publicly available content. To be on the safe side, we recommend you to browse only public profiles, and avoid interacting with private accounts." }
-          },
-          {
-            "@type": "Question",
-            "name": "What sort of content can I view with the Instagram Story watching tool?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Every type of content that is available on the Instagram app's public forums can be viewed using the Instagram story viewer. For instance, profile photos, stories, highlights, reels, and IGTV videos." }
-          },
-          {
-            "@type": "Question",
-            "name": "Which file formats are available to download videos and photos?",
-            "acceptedAnswer": { "@type": "Answer", "text": "On Story viewer, the videos can be downloaded using the .mp4 file whereas the photos can be downloaded in .jpg and .jpeg formats." }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
+
+
 </head>
 <body>
 
@@ -281,7 +121,7 @@
     <section id="features" aria-labelledby="features-heading">
       <div class="container">
         <div class="feature-hero-image">
-          <img src="/instagram-story-viewer.webp" alt="Instagram Story Viewer preview" width="1280" height="720" loading="lazy" decoding="async">
+          <img src="/instagram-story-viewer.webp" srcset="/instagram-story-viewer-400.webp 400w, /instagram-story-viewer-640.webp 640w, /instagram-story-viewer-800.webp 800w, /instagram-story-viewer.webp 1280w" sizes="(max-width: 620px) 52vw, (max-width: 1000px) 92vw, 920px" alt="Instagram Story Viewer preview" width="1280" height="720" loading="eager" decoding="async" fetchpriority="high">
         </div>
         <div class="section-title">
           <h2 id="features-heading">Why Choose Anonymous Story Viewer</h2>
@@ -700,7 +540,171 @@
     </div>
   </footer>
 
-  <script src="/app.js?v=6a08086"></script>
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://instastoryviewer.us/#website",
+        "url": "https://instastoryviewer.us/",
+        "name": "Instagram Story Viewer",
+        "description": "Free anonymous Instagram Story Viewer. Watch Stories, Reels and Highlights without login.",
+        "inLanguage": "en-US",
+        "publisher": { "@id": "https://instastoryviewer.us/#organization" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": { "@type": "EntryPoint", "urlTemplate": "https://instastoryviewer.us/?u={search_term_string}" },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://instastoryviewer.us/#organization",
+        "name": "Instagram Story Viewer",
+        "url": "https://instastoryviewer.us/",
+        "logo": { "@type": "ImageObject", "url": "https://instastoryviewer.us/logo.svg" },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "instastoryviewer.us@gmail.com",
+          "contactType": "customer support",
+          "availableLanguage": ["English"]
+        },
+        "sameAs": [
+          "https://www.linkedin.com/in/instastoryviewer-undefined-3940a041a",
+          "https://x.com/instasusa",
+          "https://www.instagram.com/instastoryviewer.us/"
+        ]
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://instastoryviewer.us/#webapp",
+        "name": "Instagram Story Viewer",
+        "url": "https://instastoryviewer.us/",
+        "description": "Free anonymous Instagram Story Viewer. Watch Stories, Reels and Highlights without login.",
+        "applicationCategory": "SocialNetworkingApplication",
+        "operatingSystem": "Web, iOS, Android, Windows, macOS",
+        "browserRequirements": "Requires JavaScript. Works in all modern browsers.",
+        "inLanguage": "en-US",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": [
+          "Watch Stories Anonymously",
+          "Download Stories",
+          "Download Reels",
+          "View Highlights",
+          "No Account Required",
+          "No Login",
+          "100% Free"
+        ]
+      },
+      {
+        "@type": "Article",
+        "@id": "https://instastoryviewer.us/#article",
+        "headline": "Instagram Story Viewer Watch & Download Stories Anonymously",
+        "description": "Free Instagram Story Viewer to watch Stories, Reels and Highlights from public accounts anonymously. No login, no account required – 100% anonymous.",
+        "url": "https://instastoryviewer.us/",
+        "datePublished": "2026-09-03T12:23:52-04:00",
+        "dateModified": "2026-09-03T12:23:52-04:00",
+        "author": { "@id": "https://instastoryviewer.us/#organization" },
+        "publisher": { "@id": "https://instastoryviewer.us/#organization" },
+        "mainEntityOfPage": { "@id": "https://instastoryviewer.us/#website" },
+        "inLanguage": "en-US",
+        "articleSection": ["Instagram Stories", "Social Media Tools", "Privacy Tools"],
+        "keywords": ["Instagram Story Viewer", "anonymous story viewer", "watch Instagram stories anonymously", "Instagram stories no login", "Instagram reels viewer"],
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://instastoryviewer.us/logo.svg",
+          "width": 1200,
+          "height": 630
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://instastoryviewer.us/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I watch Instagram stories without an account on any device?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The easiest method of watching the stories without an account is to visit the Story Viewer on your device, enter the username or account details of the respective creator and tap the search. Now the Reels and Stories related to that account opens up. This process does not require your personal information." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Instagram Story Viewer store my data?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No, to keep your privacy intact, we do not collect your personal credentials and never ask for account details. Moreover, the details, search history and watch history are never stored on our servers." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to login or register?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The tool allows you to explore the platform without login, you can directly explore the profiles of your choice." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the distinction between Instagram Stories and Highlights?",
+            "acceptedAnswer": { "@type": "Answer", "text": "On the official Instagram app, the stories and highlights resemble each other whereas used for diverse purposes. Instagram stories are short videos or photos that appear at the top of the feed but automatically deleted after 24 hours. In contrast, the highlights are the stories that you have saved in your account for later and can be accessed anytime. You can open your bio and get the highlights under that section." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can Instagram content creators see anonymous story views?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No, using the Story Viewer, you can follow the stories of the content creators or influencers without letting them know. The built-in incognito mode keeps your identity confidential without storing information. That is why, the creator never tracks your viewing activity and remains unable to list you in the viewers list." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I explore Private Instagram Stories?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No, all the private Instagram accounts are secured with Instagram's built-in security that restrict any third party tool to access the content. For that reason, the Story Viewer limits you to discover private accounts; only public profiles can be accessed using the Insta story viewer." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I view Instagram Stories anonymously?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Absolutely, you can check any public account stories and keep yourself hidden without appearing in the viewer's list since the tool does not retain your personal records or account details and helps you stay anonymous and navigate content without drawing attention of the creator." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much does the Instagram Story Viewer cost?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Our Instagram Story Viewer is free of cost plus it does not demand subscriptions after a certain time-period. You can check its premium features like anonymity, privacy, and no login requirements free without spending money." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Stories Viewer Safe?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, the Instagram story viewer is a safe and reliable tool since it follows SSL encryption methods to enhance the performance and ensure flexible usage. Unlike other tools, this viewer does not ask for creating an account or registration prior to use." }
+          },
+          {
+            "@type": "Question",
+            "name": "How can I view someone else's Instagram profiles without logging in?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No, account creation or any type of registration is not required to explore public Instagram profiles. Just scroll upwards and enter the username of the person you want to see the profile and the entire story feed along with account information opens up on your screen." }
+          },
+          {
+            "@type": "Question",
+            "name": "Which device can I use to view stories?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The online Instagram Story Viewer is easily accessed with any device. Whether you are using iPhone, iPad, Android, or PC (Windows), there are no limitations for devices and the media can be watched and downloaded conveniently." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is anonymity maintained when downloading photos and videos?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Definitely, the discreet settings remain intact, no matter you are downloading videos, photos, watching stories or reels. You can freely enjoy the platform's open access to the material without leaving any trace for the original creator being notified." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is it a legal method to search Instagram Stories in anonymous mode?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, all the public information that is available on Instagram is legal to browse, you can visit any account and its stories as long as you access publicly available content. To be on the safe side, we recommend you to browse only public profiles, and avoid interacting with private accounts." }
+          },
+          {
+            "@type": "Question",
+            "name": "What sort of content can I view with the Instagram Story watching tool?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Every type of content that is available on the Instagram app's public forums can be viewed using the Instagram story viewer. For instance, profile photos, stories, highlights, reels, and IGTV videos." }
+          },
+          {
+            "@type": "Question",
+            "name": "Which file formats are available to download videos and photos?",
+            "acceptedAnswer": { "@type": "Answer", "text": "On Story viewer, the videos can be downloaded using the .mp4 file whereas the photos can be downloaded in .jpg and .jpeg formats." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script src="/app.js?v=6a08086" defer></script>
 </body>
 </html>
 

@@ -27,10 +27,16 @@ app.use(cors());
 app.use(express.json({ limit: '1mb' }));
 app.use(morgan(isProd ? 'combined' : 'dev'));
 
-// Keep HTML documents fresh so live article edits show up immediately.
+// Keep documents revalidatable while allowing edge caches to serve them quickly.
 app.use((req, res, next) => {
-  if (req.method === 'GET' && req.accepts('html')) {
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  const isDocument = req.method === 'GET' && (
+    req.get('sec-fetch-dest') === 'document' ||
+    req.path === '/' ||
+    req.path.endsWith('.html') ||
+    !path.extname(req.path)
+  );
+  if (isDocument) {
+    res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400');
   }
   next();
 });
@@ -112,7 +118,16 @@ app.get('/api/health', (req, res) => {
 
 // ─── Static Frontend ──────────────────────────────────────────────────────────
 const publicDir = path.join(__dirname, '..', 'public');
-app.use(express.static(publicDir, { maxAge: isProd ? '1h' : '0', etag: isProd }));
+app.use(express.static(publicDir, {
+  maxAge: isProd ? '30d' : '0',
+  etag: true,
+  setHeaders(res, filePath) {
+    if (!isProd) return;
+    if (/\.(?:css|js|svg|webp|png|jpe?g|ico|woff2?)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=2592000, stale-while-revalidate=86400');
+    }
+  }
+}));
 
 // ─── Clean URLs (no .html extension) ─────────────────────────────────────────
 const cleanPages = ['blog','about','contact','privacy','disclaimer','terms','dmca'];
