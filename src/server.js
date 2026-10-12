@@ -133,6 +133,10 @@ app.get('/view-instagram-stories-anonymously-legal', (req, res) => {
   res.sendFile(path.join(publicDir, 'view-instagram-stories-anonymously-legal.html'));
 });
 
+app.get('/how-to-create-instagram-community', (req, res) => {
+  res.sendFile(path.join(publicDir, 'how-to-create-instagram-community.html'));
+});
+
 app.get('/blog/:slug', (req, res) => {
   const file = path.join(publicDir, 'blog', `${req.params.slug}.html`);
   if (require('fs').existsSync(file)) return res.sendFile(file);

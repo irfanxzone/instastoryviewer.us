@@ -164,6 +164,7 @@ video.modal-media{background:#000}
 .article-section h2,.article-section h3{color:#161922;line-height:1.25;margin:0 0 6px;display:flex;align-items:center;gap:12px;width:fit-content}
 .article-section h2{font-size:26px}
 .article-section h3{font-size:21px;margin-top:14px}
+.article-section h4{font-size:17px;line-height:1.35;color:#2c2f3b;margin:14px 0 6px;font-weight:700}
 .article-section h2::before,.article-section h3::before{content:"";width:5px;height:1.05em;border-radius:999px;background:var(--grad);flex:0 0 5px;box-shadow:0 6px 16px rgba(193,53,132,.18)}
 .article-section p,.article-section li{color:#545766;line-height:1.7;font-size:15.5px}
 .article-section p{margin:0 0 10px}
