@@ -156,6 +156,10 @@ app.get('/best-instagram-story-viewers', (req, res) => {
   res.sendFile(path.join(publicDir, 'best-instagram-story-viewers.html'));
 });
 
+app.get('/personal-branding-instagram', (req, res) => {
+  res.sendFile(path.join(publicDir, 'personal-branding-instagram.html'));
+});
+
 app.get('/blog/:slug', (req, res) => {
   const file = path.join(publicDir, 'blog', `${req.params.slug}.html`);
   if (require('fs').existsSync(file)) return res.sendFile(file);
