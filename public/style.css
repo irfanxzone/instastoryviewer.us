@@ -27,7 +27,7 @@ section{padding:64px 0}.section-title{text-align:center;margin-bottom:38px}.sect
 .step h3{font-size:15px;font-weight:700;margin:0 0 8px;color:#161922}
 .step p{margin:0;color:var(--muted);font-size:13px;line-height:1.65}
 
-.article{max-width:900px;margin:0 auto}.article h2{font-size:34px;line-height:1.25;margin:0 0 14px}.article h3{font-size:23px;margin:28px 0 10px}.article p{color:#686b76;margin:0 0 16px}.note{background:#faf7ff;border-left:4px solid #c13584;border-radius:12px;padding:20px;margin:22px 0;color:#50535f}
+.article{max-width:900px;margin:0 auto}.article h2{font-size:34px;line-height:1.25;margin:0 0 14px}.article h3{font-size:23px;margin:28px 0 10px}.article p{color:#686b76;margin:0 0 16px}.article.feature-intro{margin:38px auto 58px}.article.feature-intro h2{margin-bottom:22px}.note{background:#faf7ff;border-left:4px solid #c13584;border-radius:12px;padding:20px;margin:22px 0;color:#50535f}
 
 /* â”€â”€ FAQ smooth â”€â”€ */
 .faq{max-width:900px;margin:0 auto}
