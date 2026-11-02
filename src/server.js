@@ -118,6 +118,11 @@ app.get('/api/health', (req, res) => {
 
 // ─── Static Frontend ──────────────────────────────────────────────────────────
 const publicDir = path.join(__dirname, '..', 'public');
+
+app.get('/blog/view-instagram-stories-anonymously', (req, res) => {
+  res.redirect(301, '/how-to-watch-instagram-stories');
+});
+
 app.use(express.static(publicDir, {
   maxAge: isProd ? '30d' : '0',
   etag: true,
