@@ -4,7 +4,7 @@
 
   <url>
     <loc>https://instastoryviewer.us/</loc>
-    <lastmod>2026-11-02T21:21:05+05:00</lastmod>
+    <lastmod>2026-11-04T22:54:22+05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://instastoryviewer.us/"/>
@@ -15,6 +15,13 @@
     <lastmod>2026-11-02T01:24:07+05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://instastoryviewer.us/instagram-story-highlights-guide</loc>
+    <lastmod>2026-11-04T22:46:27+05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <url>
